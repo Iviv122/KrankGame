@@ -1,0 +1,92 @@
+[gd_scene load_steps=15 format=3 uid="uid://dqiexiir6m3td"]
+
+[ext_resource type="Material" uid="uid://d120gbkkj46sx" path="res://materials/cyan.tres" id="1_l20p6"]
+[ext_resource type="PackedScene" uid="uid://ci7vpbslwfxyq" path="res://prefabs/player.tscn" id="1_tqfh0"]
+[ext_resource type="Material" uid="uid://cor3hu5n3h5rr" path="res://materials/grey.tres" id="2_l20p6"]
+[ext_resource type="Material" uid="uid://cnvof0ig0uvmt" path="res://materials/tile.tres" id="4_vephn"]
+[ext_resource type="Script" uid="uid://bqr6lr4qmchoe" path="res://objects/bake.gd" id="5_b0nem"]
+[ext_resource type="Script" uid="uid://0c7qf8owiac7" path="res://objects/enemy.gd" id="6_7qr1p"]
+
+[sub_resource type="Environment" id="Environment_l20p6"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_x0xbu"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_7qr1p"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_x0xbu"]
+vertices = PackedVector3Array(-9.5, 1, -9.5, -9.5, 1, -6, -7.75, 1, -5.75, -7.75, 1, -0.75, -1, 1, -0.5, -0.75, 1, -1, 0, 1, -1, 0, 1, -9.5, 0.75, 1, -1, 1, 1, 0, 9.5, 1, 0, 9.5, 1, -9.5, -13, 6, -1, -8.75, 6, -0.75, -8.75, 6, -5, -13, 6, -5, -9.5, 1, -4.75, -9.5, 1, -1, -9, 1, -1, -9, 1, -4.75, -1, 1, 0.75, -8.25, 1, 0.25, 0, 1, 1, -9.5, 1, 0.25, -9.5, 1, 9.5, 0, 1, 9.5, 0.75, 1, 1, 9.5, 1, 9.5)
+polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(4, 3, 5), PackedInt32Array(5, 3, 2), PackedInt32Array(6, 5, 7), PackedInt32Array(7, 5, 2), PackedInt32Array(7, 2, 0), PackedInt32Array(8, 6, 7), PackedInt32Array(9, 8, 10), PackedInt32Array(10, 8, 11), PackedInt32Array(11, 8, 7), PackedInt32Array(15, 14, 12), PackedInt32Array(12, 14, 13), PackedInt32Array(19, 18, 16), PackedInt32Array(16, 18, 17), PackedInt32Array(4, 20, 3), PackedInt32Array(3, 20, 21), PackedInt32Array(20, 22, 21), PackedInt32Array(21, 22, 23), PackedInt32Array(23, 22, 25), PackedInt32Array(23, 25, 24), PackedInt32Array(25, 22, 26), PackedInt32Array(9, 10, 26), PackedInt32Array(26, 10, 27), PackedInt32Array(26, 27, 25)]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ba4lm"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_ba4lm"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_7cn4i"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_tqfh0"]
+
+[node name="TestScene" type="Node3D"]
+
+[node name="OmniLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_l20p6")
+
+[node name="Player" parent="." instance=ExtResource("1_tqfh0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.16227, 1.57107, 2.68554)
+
+[node name="enemy" type="CharacterBody3D" parent="." node_paths=PackedStringArray("player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.58041, 1.49619, -8.04832)
+script = ExtResource("6_7qr1p")
+player = NodePath("../Player")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="enemy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00708008, 0)
+shape = SubResource("CapsuleShape3D_x0xbu")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="enemy"]
+path_height_offset = 3.0
+avoidance_enabled = true
+use_3d_avoidance = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="enemy"]
+mesh = SubResource("CapsuleMesh_7qr1p")
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000475407, 0.0032692, -0.000366092)
+navigation_mesh = SubResource("NavigationMesh_x0xbu")
+script = ExtResource("5_b0nem")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 3, -3)
+material_override = ExtResource("1_l20p6")
+use_collision = true
+size = Vector3(5, 5, 5)
+material = ExtResource("2_l20p6")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D"]
+material_override = ExtResource("4_vephn")
+use_collision = true
+size = Vector3(20, 1, 20)
+material = ExtResource("2_l20p6")
+
+[node name="box" type="RigidBody3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.73676, 4.24022, -0.979701)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/box"]
+shape = SubResource("BoxShape3D_ba4lm")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/box"]
+material_override = ExtResource("2_l20p6")
+mesh = SubResource("BoxMesh_ba4lm")
+
+[node name="Ball" type="RigidBody3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.12011, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Ball"]
+shape = SubResource("SphereShape3D_7cn4i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/Ball"]
+material_override = ExtResource("2_l20p6")
+mesh = SubResource("SphereMesh_tqfh0")
