@@ -16,3 +16,4 @@ Hold Left Mouse Button to throw
 - DotWeen
 
 ## Code, code is mess
+## godotold contains early stages of game
