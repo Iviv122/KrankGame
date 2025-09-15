@@ -15,6 +15,10 @@ Use Left Mouse Button to pick up
 
 Hold Left Mouse Button to throw 
 
+R  restart
+
+ESC pause
+
 ## Dependecies
 - https://github.com/AnnulusGames/UnityProgressBar.git?path=Assets/UnityProgressBar
 - DotWeen
